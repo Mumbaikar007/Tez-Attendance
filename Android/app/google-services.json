@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "96780603048",
+    "firebase_url": "https://tezattendance-3584d.firebaseio.com",
+    "project_id": "tezattendance-3584d",
+    "storage_bucket": "tezattendance-3584d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96780603048:android:d46ce2e056f39aee",
+        "android_client_info": {
+          "package_name": "com.example.optimus.tezattendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96780603048-odkebq8j1q3js7ia5fjf3vmgeus9lt7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMTUbl3cQTN6zGLLvH69yypT52Jrcw5Ck"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

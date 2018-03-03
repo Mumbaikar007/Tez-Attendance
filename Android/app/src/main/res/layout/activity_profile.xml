@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.optimus.tezattendance.ProfileActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_centerHorizontal ="true"
+        android:layout_centerVertical ="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="25dp">
+
+        <Button
+            android:id="@+id/buttonRegisterStudent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register" />
+
+        <Button
+            android:id="@+id/buttonTakeAttendance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Take Attendance" />
+
+        <Button
+            android:id="@+id/buttonEmptyDatabase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Empty Database" />
+
+        <Button
+            android:id="@+id/buttonUploadProxy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload Proxy" />
+
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:text="Logout"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="17sp"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
