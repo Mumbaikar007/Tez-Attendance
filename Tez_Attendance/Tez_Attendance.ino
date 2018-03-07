@@ -21,6 +21,8 @@ ID 0 not allowed while registering !!
 # define mySerial_rx 2
 # define mySerial_tx 3
 
+int previousFingerPrint = 0;
+
 /* ================ Done Adding Headers and Port Macros ============= */
 
 
@@ -58,9 +60,21 @@ void setup() {
   
 }
 
+uint8_t readnumber(void) {
+  uint8_t num = 0;
+  
+  while (num == 0) {
+    while (! Serial.available());
+    num = Serial.parseInt();
+  }
+  return num;
+}
+
 /* ================ Done with The Setup ============= */
 
 char ReadFromBluetooth (){
+
+  blueTooth.listen();
   
   while(!blueTooth.available());
   Serial.println("Wait");
@@ -76,10 +90,12 @@ char ReadFromBluetooth (){
 }
 /* ================== RegisterFingerprints =============== */
 
-uint8_t getFingerprintEnroll( int id ) {
+uint8_t getFingerprintEnroll(int id) {
 
   int p = -1;
   Serial.print("Waiting for valid finger to enroll as #"); Serial.println(id);
+  
+  mySerial.listen();
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -215,9 +231,9 @@ uint8_t getFingerprintEnroll( int id ) {
   }   
 }
 
-int ReadIdFromBluetooth(){
+uint8_t ReadIdFromBluetooth(){
 
-  int number = 0;
+  uint8_t number = 0;
   
   for ( int i = 0; i < 3; i ++){
     char digit = ReadFromBluetooth();
@@ -237,11 +253,27 @@ void RegisterFingerprints() {
     
     nextAttendance = 0;
 
+    
     Serial.println ("Please enter his/her Roll Number ... ");
-    int id = ReadIdFromBluetooth();
+    uint8_t id = ReadIdFromBluetooth();
 
     Serial.print( "Id Entered: ");
     Serial.println ( id );
+    
+    if ( id == 0 ){
+      Serial.println ("ID 0 Not allowed !!");
+    }
+    /*
+    Serial.println("Ready to enroll a fingerprint!");
+    Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as...");
+    id = readnumber();
+    if (id == 0) {// ID #0 not allowed, try again!
+       return;
+    }
+    Serial.print("Enrolling ID #");
+    Serial.println(id);
+    */
+
     
     while (!getFingerprintEnroll(id) );
 
@@ -257,8 +289,107 @@ void RegisterFingerprints() {
 
 /* ================== TakeAttendance =============== */
 
+uint8_t getFingerprintID() {
+  uint8_t p = finger.getImage();
+  switch (p) {
+    case FINGERPRINT_OK:
+      Serial.println("Image taken");
+      break;
+    case FINGERPRINT_NOFINGER:
+      Serial.println("No finger detected");
+      return p;
+    case FINGERPRINT_PACKETRECIEVEERR:
+      Serial.println("Communication error");
+      return p;
+    case FINGERPRINT_IMAGEFAIL:
+      Serial.println("Imaging error");
+      return p;
+    default:
+      Serial.println("Unknown error");
+      return p;
+  }
+
+  // OK success!
+
+  p = finger.image2Tz();
+  switch (p) {
+    case FINGERPRINT_OK:
+      Serial.println("Image converted");
+      break;
+    case FINGERPRINT_IMAGEMESS:
+      Serial.println("Image too messy");
+      return p;
+    case FINGERPRINT_PACKETRECIEVEERR:
+      Serial.println("Communication error");
+      return p;
+    case FINGERPRINT_FEATUREFAIL:
+      Serial.println("Could not find fingerprint features");
+      return p;
+    case FINGERPRINT_INVALIDIMAGE:
+      Serial.println("Could not find fingerprint features");
+      return p;
+    default:
+      Serial.println("Unknown error");
+      return p;
+  }
+  
+  // OK converted!
+  p = finger.fingerFastSearch();
+  if (p == FINGERPRINT_OK) {
+    Serial.println("Found a print match!");
+  } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
+    Serial.println("Communication error");
+    return p;
+  } else if (p == FINGERPRINT_NOTFOUND) {
+    Serial.println("Did not find a match");
+    return p;
+  } else {
+    Serial.println("Unknown error");
+    return p;
+  }   
+  
+  // found a match!
+  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
+  Serial.print(" with confidence of "); Serial.println(finger.confidence); 
+
+  return finger.fingerID;
+}
+
+// returns -1 if failed, otherwise returns ID #
+int getFingerprintIDez() {
+  
+  uint8_t p = finger.getImage();
+  if (p != FINGERPRINT_OK)  return -1;
+
+  p = finger.image2Tz();
+  if (p != FINGERPRINT_OK)  return -1;
+
+  p = finger.fingerFastSearch();
+  if (p != FINGERPRINT_OK)  return -1;
+  
+  // found a match!
+  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
+  if ( finger.fingerID > 0 && finger.fingerID <10 ){
+    if ( previousFingerPrint != finger.fingerID ){
+      blueTooth.write( (char) ( finger.fingerID + '0') ); 
+    }
+  }
+  Serial.print(" with confidence of "); Serial.println(finger.confidence);
+  return finger.fingerID; 
+}
+
+
 void TakeAttendance(){
 
+    Serial.println( "getFingerprintIDez");
+    int t = 2;
+    mySerial.listen();
+    while ( true ){
+      getFingerprintIDez();
+      delay(50);
+    }
+      
+    
 }
 
 /* ================ Done TakeAttendance ============= */
@@ -274,7 +405,16 @@ void DeleteFingerprint(){
 /* ================== DeleteEntireDatabase =============== */
 
 void DeleteEntireDatabase(){
+
+    char command = ReadFromBluetooth();
+
+    mySerial.listen();
+    if ( (int) command - '0' == 1){
+      Serial.println("Almost:D");
+      finger.emptyDatabase(); 
+    }
   
+     
 }
 
 /* ================ Done DeleteEntireDatabase ============= */
@@ -295,13 +435,15 @@ void CheckBluetoothCommand() {
               RegisterFingerprints();
               break;
               
-    case '2': TakeAttendance();
+    case '2': Serial.println("Switching to TakeAttendance");
+              TakeAttendance();
               break;
               
     case '3': DeleteFingerprint();
               break;
               
-    case '4': DeleteEntireDatabase();
+    case '4': Serial.println("Switching to Delete entire database function");
+              DeleteEntireDatabase();
               break;
 
     default : Serial.println("Enter a command !");  
@@ -325,3 +467,4 @@ void loop() {
 }
 
 /* ================ Done The Main Loop ============= */
+

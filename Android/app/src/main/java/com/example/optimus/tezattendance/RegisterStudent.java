@@ -48,6 +48,8 @@ public class RegisterStudent extends AppCompatActivity {
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         checkBTState();
 
+        //sendData("1");
+
         buttonSendId.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
 
