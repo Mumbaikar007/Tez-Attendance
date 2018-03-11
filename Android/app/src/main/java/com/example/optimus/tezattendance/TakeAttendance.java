@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -18,14 +19,24 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TakeAttendance extends AppCompatActivity {
-    private static final String TAG = "bluetooth2";
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-    TextView txtArduino;
+public class TakeAttendance extends AppCompatActivity {
+
+    TextView txtArduino, textPresent;
+    ImageView imageViewTick;
     Handler h;
+
+    DatabaseReference databaseReference;
+    private static final String TAG = "bluetooth2";
 
     final int RECIEVE_MESSAGE = 1;        // Status  for Handler
     private BluetoothAdapter btAdapter = null;
@@ -47,7 +58,13 @@ public class TakeAttendance extends AppCompatActivity {
 
         setContentView(R.layout.activity_take_attendance);
 
-        txtArduino = (TextView) findViewById(R.id.textViewPresentRoll);      // for display the received data from the Arduino
+        textPresent = findViewById(R.id.textViewPresentRoll);      // for display the received data from the Arduino
+        txtArduino = findViewById(R.id.textViewPresentRollID);
+        imageViewTick = findViewById(R.id.imageViewTick);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        imageViewTick.setVisibility(View.INVISIBLE);
+
 
         h = new  Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -65,8 +82,13 @@ public class TakeAttendance extends AppCompatActivity {
                             Log.d(TAG, "eol > 0");
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
-                            txtArduino.setText("Data from Arduino: " + sbprint);            // update TextView
 
+                            updateAttendance(id);
+
+
+                            txtArduino.setText(sbprint);            // update TextView
+                            imageViewTick.setVisibility(View.VISIBLE);
+                            textPresent.setText("Marked Present !!");
                             //btnOff.setEnabled(true);
                             //btnOn.setEnabled(true);
 
@@ -77,8 +99,14 @@ public class TakeAttendance extends AppCompatActivity {
             };
         };
 
+
+
+
+
         btAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
         checkBTState();
+
+
 
         /*
         btnOn.setOnClickListener(new OnClickListener() {
@@ -97,6 +125,25 @@ public class TakeAttendance extends AppCompatActivity {
             }
         });
         */
+    }
+
+    public void updateAttendance (final String idToUpdate ){
+        String key;
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String rollNumeber;
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    rollNumeber = ds.getValue(String.class);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        })
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {

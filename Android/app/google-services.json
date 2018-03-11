@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "96780603048-nu8hg49tedllksq760eit6rrnjkskdo2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.optimus.tezattendance",
+            "certificate_hash": "ad903fac27b2f91030e6f895ada2d0171df403bc"
+          }
+        },
+        {
           "client_id": "96780603048-odkebq8j1q3js7ia5fjf3vmgeus9lt7f.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96780603048-odkebq8j1q3js7ia5fjf3vmgeus9lt7f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

@@ -1,11 +1,14 @@
 package com.example.optimus.tezattendance;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -17,19 +20,35 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class RegisterStudent extends AppCompatActivity {
 
-    private static final String TAG = "bluetooth1";
-
     EditText editTextTakeId;
+    TextView textViewIdRegistered;
     Button buttonSendId;
 
+    private FirebaseAuth firebaseAuth;
+    DatabaseReference databaseReference;
+
+    private static final String TAG = "bluetooth2";
+
+    Handler h;
+
+    final int RECIEVE_MESSAGE = 1;        // Status  for Handler
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
-    private OutputStream outStream = null;
+    private StringBuilder sb = new StringBuilder();
+
+    private ConnectedThread mConnectedThread;
 
     // SPP UUID service
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -37,26 +56,74 @@ public class RegisterStudent extends AppCompatActivity {
     // MAC-address of Bluetooth module (you must edit this line)
     private static String address = "98:D3:33:80:A1:93";
 
+    // Called when the activity is first created.
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_register_student);
+
+        firebaseAuth= FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        if(firebaseAuth.getCurrentUser() == null){
+            //user is not logged in
+            finish();
+            startActivity(new Intent(this,LoginActivity.class));
+        }
 
         editTextTakeId = findViewById(R.id.editTextTakeId);
         buttonSendId = findViewById(R.id.buttonSendId);
+        textViewIdRegistered = findViewById(R.id.editTextTakeId);
 
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        firebaseAuth= FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() == null){
+            //user is not logged in
+            finish();
+            startActivity(new Intent(this,LoginActivity.class));
+        }
+
+        h = new  Handler() {
+            public void handleMessage(android.os.Message msg) {
+                switch (msg.what) {
+                    case RECIEVE_MESSAGE:                                                   // if receive massage
+                        Log.d(TAG, "Receiving data");
+
+                        byte[] readBuf = (byte[]) msg.obj;
+
+                        String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
+
+                        sb.append(strIncom);                                                // append string
+                        int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
+                        if (endOfLineIndex > 0) {                                            // if end-of-line,
+                            Log.d(TAG, "eol > 0");
+                            String sbprint = sb.substring(0, endOfLineIndex);               // extract string
+                            sb.delete(0, sb.length());                                      // and clear
+                            textViewIdRegistered.setText("Id: " + strIncom + " registered !");
+
+                        }
+                        //Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
+                        break;
+                }
+            };
+        };
+
+        btAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
         checkBTState();
-
-        //sendData("1");
 
         buttonSendId.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+                //btnOn.setEnabled(false);
 
-                String newId = editTextTakeId.getText().toString();
+                String id = editTextTakeId.getText().toString();
 
-                sendData(newId);
-                Toast.makeText(getBaseContext(), "Register finger for id: " + newId, Toast.LENGTH_SHORT).show();
+                mConnectedThread.write(id);    // Send "1" via Bluetooth
+                //Toast.makeText(getBaseContext(), "Turn on LED", Toast.LENGTH_SHORT).show();
+
+                HashMap<String , String> map = new HashMap<>();
+                map.put(id, "0");
+
+                databaseReference.push().setValue(map);
             }
         });
 
@@ -90,8 +157,8 @@ public class RegisterStudent extends AppCompatActivity {
 
         try {
             btSocket = createBluetoothSocket(device);
-        } catch (IOException e1) {
-            errorExit("Fatal Error", "In onResume() and socket create failed: " + e1.getMessage() + ".");
+        } catch (IOException e) {
+            errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
         }
 
         // Discovery is resource intensive.  Make sure it isn't going on
@@ -102,7 +169,7 @@ public class RegisterStudent extends AppCompatActivity {
         Log.d(TAG, "...Connecting...");
         try {
             btSocket.connect();
-            Log.d(TAG, "...Connection ok...");
+            Log.d(TAG, "....Connection ok...");
         } catch (IOException e) {
             try {
                 btSocket.close();
@@ -114,11 +181,8 @@ public class RegisterStudent extends AppCompatActivity {
         // Create a data stream so we can talk to server.
         Log.d(TAG, "...Create Socket...");
 
-        try {
-            outStream = btSocket.getOutputStream();
-        } catch (IOException e) {
-            errorExit("Fatal Error", "In onResume() and output stream creation failed:" + e.getMessage() + ".");
-        }
+        mConnectedThread = new ConnectedThread(btSocket);
+        mConnectedThread.start();
     }
 
     @Override
@@ -126,14 +190,6 @@ public class RegisterStudent extends AppCompatActivity {
         super.onPause();
 
         Log.d(TAG, "...In onPause()...");
-
-        if (outStream != null) {
-            try {
-                outStream.flush();
-            } catch (IOException e) {
-                errorExit("Fatal Error", "In onPause() and failed to flush output stream: " + e.getMessage() + ".");
-            }
-        }
 
         try     {
             btSocket.close();
@@ -163,20 +219,50 @@ public class RegisterStudent extends AppCompatActivity {
         finish();
     }
 
-    private void sendData(String message) {
-        byte[] msgBuffer = message.getBytes();
+    private class ConnectedThread extends Thread {
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
 
-        Log.d(TAG, "...Send data: " + message + "...");
+        public ConnectedThread(BluetoothSocket socket) {
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
 
-        try {
-            outStream.write(msgBuffer);
-        } catch (IOException e) {
-            String msg = "In onResume() and an exception occurred during write: " + e.getMessage();
-            if (address.equals("00:00:00:00:00:00"))
-                msg = msg + ".\n\nUpdate your server address from 00:00:00:00:00:00 to the correct address on line 35 in the java code";
-            msg = msg +  ".\n\nCheck that the SPP UUID: " + MY_UUID.toString() + " exists on server.\n\n";
+            // Get the input and output streams, using temp objects because
+            // member streams are final
+            try {
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) { }
 
-            errorExit("Fatal Error", msg);
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+        }
+
+        public void run() {
+            byte[] buffer = new byte[256];  // buffer store for the stream
+            int bytes; // bytes returned from read()
+
+            // Keep listening to the InputStream until an exception occurs
+            while (true) {
+                try {
+                    // Read from the InputStream
+                    bytes = mmInStream.read(buffer);        // Get number of bytes and message in "buffer"
+                    h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Send to message queue Handler
+                } catch (IOException e) {
+                    break;
+                }
+            }
+        }
+
+        // Call this from the main activity to send data to the remote device
+        public void write(String message) {
+            Log.d(TAG, "...Data to send: " + message + "...");
+            byte[] msgBuffer = message.getBytes();
+            try {
+                mmOutStream.write(msgBuffer);
+            } catch (IOException e) {
+                Log.d(TAG, "...Error data send: " + e.getMessage() + "...");
+            }
         }
     }
 

@@ -38,7 +38,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             //user is not logged in
             finish();
             startActivity(new Intent(this,LoginActivity.class));
-
         }
 
         FirebaseUser user  = firebaseAuth.getCurrentUser();

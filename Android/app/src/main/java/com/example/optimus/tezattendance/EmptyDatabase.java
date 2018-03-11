@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
@@ -25,6 +28,8 @@ public class EmptyDatabase extends AppCompatActivity {
 
     private Button buttonEmptyFingerPrintDatabase, buttonSendFour;
     private TextView textViewEmptyDatabase;
+    DatabaseReference databaseAttendance;
+
 
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
@@ -41,6 +46,8 @@ public class EmptyDatabase extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_empty_database);
 
+
+        databaseAttendance = FirebaseDatabase.getInstance().getReference();
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         checkBTState();
@@ -63,6 +70,7 @@ public class EmptyDatabase extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendData("1");
+                databaseAttendance.setValue(null);
                 textViewEmptyDatabase.setText("Databse is Empty");
             }
         });
