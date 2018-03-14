@@ -205,6 +205,7 @@ uint8_t getFingerprintEnroll(int id) {
     Serial.println("Communication error");
     return p;
   } else if (p == FINGERPRINT_ENROLLMISMATCH) {
+    blueTooth.write("0");
     Serial.println("Fingerprints did not match");
     return p;
   } else {
@@ -215,6 +216,7 @@ uint8_t getFingerprintEnroll(int id) {
   Serial.print("ID "); Serial.println(id);
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
+    blueTooth.write((char)id +'0');
     Serial.println("Stored!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
@@ -261,7 +263,8 @@ void RegisterFingerprints() {
     Serial.println ( id );
     
     if ( id == 0 ){
-      Serial.println ("ID 0 Not allowed !!");
+      //Serial.println ("ID 0 Not allowed !!");
+      break;
     }
     /*
     Serial.println("Ready to enroll a fingerprint!");
@@ -277,8 +280,10 @@ void RegisterFingerprints() {
     
     while (!getFingerprintEnroll(id) );
 
+    /*
     Serial.println ( "Do you want to register someone else ? (1/0)");
     nextAttendance = ( ReadFromBluetooth() == '1' ? 1 : 0 );
+    */
     
   }
   
@@ -369,8 +374,10 @@ int getFingerprintIDez() {
   
   // found a match!
   Serial.print("Found ID #"); Serial.print(finger.fingerID); 
+  
   if ( finger.fingerID > 0 && finger.fingerID <10 ){
     if ( previousFingerPrint != finger.fingerID ){
+      previousFingerPrint = finger.fingerID;
       blueTooth.write( (char) ( finger.fingerID + '0') ); 
     }
   }
