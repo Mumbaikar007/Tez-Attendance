@@ -143,7 +143,7 @@ public class TakeAttendance extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        })
+        });
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
