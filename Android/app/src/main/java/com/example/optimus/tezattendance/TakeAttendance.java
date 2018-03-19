@@ -83,7 +83,7 @@ public class TakeAttendance extends AppCompatActivity {
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
 
-                            updateAttendance(id);
+                            //updateAttendance(id);
 
 
                             txtArduino.setText(sbprint);            // update TextView
