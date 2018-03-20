@@ -212,7 +212,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         if ( view == buttonRegisterStudent){
             sendData("1");
-            startActivity(new Intent(this,RegisterStudent.class));
+            startActivity(new Intent(this,RegisterClass.class));
         }
 
         if ( view == buttonTakeAttendance ){

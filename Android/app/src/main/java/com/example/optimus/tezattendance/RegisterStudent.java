@@ -36,6 +36,7 @@ public class RegisterStudent extends AppCompatActivity {
     TextView textViewIdRegistered;
     Button buttonSendId;
 
+    String className;
     private FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
 
@@ -76,12 +77,7 @@ public class RegisterStudent extends AppCompatActivity {
         buttonSendId = findViewById(R.id.buttonSendId);
         textViewIdRegistered = findViewById(R.id.editTextTakeId);
 
-        firebaseAuth= FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser() == null){
-            //user is not logged in
-            finish();
-            startActivity(new Intent(this,LoginActivity.class));
-        }
+        className = getIntent().getExtras().getString("ClassName");
 
         h = new  Handler() {
             public void handleMessage(android.os.Message msg) {
