@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
@@ -40,6 +41,7 @@ public class RegisterStudent extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
 
+    ArrayList<String> arrayListSubjects;
     private static final String TAG = "bluetooth2";
 
     Handler h;
@@ -75,9 +77,22 @@ public class RegisterStudent extends AppCompatActivity {
 
         editTextTakeId = findViewById(R.id.editTextTakeId);
         buttonSendId = findViewById(R.id.buttonSendId);
-        textViewIdRegistered = findViewById(R.id.editTextTakeId);
+        textViewIdRegistered = findViewById(R.id.textViewIdRegistered);
 
-        className = getIntent().getExtras().getString("ClassName");
+
+
+
+
+        className = getIntent().getStringExtra("ClassName");
+
+        //Toast.makeText(getApplicationContext(), className + " !! ", Toast.LENGTH_SHORT).show();
+        arrayListSubjects = (ArrayList<String>) getIntent().getSerializableExtra("SubjectsList");
+        //Toast.makeText(getApplicationContext(), arrayListSubjects.size() + " !! ", Toast.LENGTH_SHORT).show();
+        //editTextTakeId.setText(arrayListSubjects.size()+"");
+
+
+
+
 
         h = new  Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -95,7 +110,23 @@ public class RegisterStudent extends AppCompatActivity {
                             Log.d(TAG, "eol > 0");
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
-                            textViewIdRegistered.setText("Id: " + strIncom + " registered !");
+                            textViewIdRegistered.setText("Id: " + sbprint + " registered !");
+
+                            //String pushStudent =
+                            //databaseReference.child(className).child("Students").child(sbprint);
+                            //String pushID = databaseReference.child(className).child("Students")
+                                    //.child(pushStudent).push().getKey();
+
+                            //databaseReference.child(className).child("Students").child(pushStudent).child("RollNo").setValue(strIncom);
+                            
+                            
+                            for ( int i = 0 ; i < arrayListSubjects.size(); i ++){
+
+                                Subject subject = new Subject(arrayListSubjects.get(i), "0");
+
+                                databaseReference.child(className).child("Students").child(sbprint).
+                                    child("Subjects").push().setValue(subject);
+                            }
 
                         }
                         //Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
@@ -116,10 +147,8 @@ public class RegisterStudent extends AppCompatActivity {
                 mConnectedThread.write(id);    // Send "1" via Bluetooth
                 //Toast.makeText(getBaseContext(), "Turn on LED", Toast.LENGTH_SHORT).show();
 
-                HashMap<String , String> map = new HashMap<>();
-                map.put(id, "0");
 
-                databaseReference.push().setValue(map);
+
             }
         });
 

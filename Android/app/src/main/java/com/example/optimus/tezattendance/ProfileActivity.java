@@ -217,7 +217,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         if ( view == buttonTakeAttendance ){
             sendData("2");
-            startActivity(new Intent(this,TakeAttendance.class));
+            startActivity(new Intent(this,AttendanceMiddleware.class));
         }
 
         if ( view == buttonUploadProxy){

@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class TakeAttendance extends AppCompatActivity {
@@ -34,6 +35,10 @@ public class TakeAttendance extends AppCompatActivity {
     TextView txtArduino, textPresent;
     ImageView imageViewTick;
     Handler h;
+
+
+    String className, subjectName, key;
+    Subject subjectToUpdate;
 
     DatabaseReference databaseReference;
     private static final String TAG = "bluetooth2";
@@ -63,6 +68,19 @@ public class TakeAttendance extends AppCompatActivity {
         imageViewTick = findViewById(R.id.imageViewTick);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        Intent x=getIntent();
+        className = x.getStringExtra("ClassName");
+        subjectName = x.getStringExtra("SubjectName");
+        key = x.getStringExtra("Key");
+        subjectToUpdate = x.getExtras().getParcelable("SubjectToUpdate");
+
+
+        txtArduino.setText(key);
+        //Toast.makeText(getApplicationContext(), className,Toast.LENGTH_SHORT).show();
+
+        //databaseReference.child(className).child("Subjects").child(key).setValue(subjectToUpdate);
+
+
         imageViewTick.setVisibility(View.INVISIBLE);
 
 
@@ -83,7 +101,7 @@ public class TakeAttendance extends AppCompatActivity {
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
 
-                            //updateAttendance(id);
+                            //updateAttendance(sbprint);
 
 
                             txtArduino.setText(sbprint);            // update TextView
@@ -128,15 +146,29 @@ public class TakeAttendance extends AppCompatActivity {
     }
 
     public void updateAttendance (final String idToUpdate ){
-        String key;
-        databaseReference.addValueEventListener(new ValueEventListener() {
+
+        final Query query;
+
+        query = databaseReference
+                .child(className).child("Students")
+                .child(idToUpdate).child("Subjects");
+
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String rollNumeber;
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    rollNumeber = ds.getValue(String.class);
+
+                    Subject subject = ds.getValue(Subject.class);
+
+                    if ( subject.subjectName.equals(subjectName)){
+                        key = ds.getKey();
+                        subjectToUpdate = subject;
+                        break;
+                    }
 
                 }
+
             }
 
             @Override
@@ -144,6 +176,17 @@ public class TakeAttendance extends AppCompatActivity {
 
             }
         });
+
+
+        int lecturesCompleted = Integer.parseInt(subjectToUpdate.lectures);
+        lecturesCompleted++;
+
+        subjectToUpdate.lectures = Integer.toString(lecturesCompleted);
+
+        databaseReference.child(className)
+                .child("Students").child(idToUpdate).child("Subjects")
+                .child(key).setValue(subjectToUpdate);
+
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
