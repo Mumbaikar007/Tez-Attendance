@@ -71,11 +71,11 @@ public class TakeAttendance extends AppCompatActivity {
         Intent x=getIntent();
         className = x.getStringExtra("ClassName");
         subjectName = x.getStringExtra("SubjectName");
-        key = x.getStringExtra("Key");
-        subjectToUpdate = x.getExtras().getParcelable("SubjectToUpdate");
+        //key = x.getStringExtra("Key");
+        //subjectToUpdate = x.getExtras().getParcelable("SubjectToUpdate");
 
 
-        txtArduino.setText(key);
+        //txtArduino.setText(key);
         //Toast.makeText(getApplicationContext(), className,Toast.LENGTH_SHORT).show();
 
         //databaseReference.child(className).child("Subjects").child(key).setValue(subjectToUpdate);
@@ -101,7 +101,7 @@ public class TakeAttendance extends AppCompatActivity {
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
 
-                            //updateAttendance(sbprint);
+                            updateAttendance(sbprint);
 
 
                             txtArduino.setText(sbprint);            // update TextView
@@ -164,7 +164,6 @@ public class TakeAttendance extends AppCompatActivity {
                     if ( subject.subjectName.equals(subjectName)){
                         key = ds.getKey();
                         subjectToUpdate = subject;
-                        break;
                     }
 
                 }
@@ -178,14 +177,7 @@ public class TakeAttendance extends AppCompatActivity {
         });
 
 
-        int lecturesCompleted = Integer.parseInt(subjectToUpdate.lectures);
-        lecturesCompleted++;
 
-        subjectToUpdate.lectures = Integer.toString(lecturesCompleted);
-
-        databaseReference.child(className)
-                .child("Students").child(idToUpdate).child("Subjects")
-                .child(key).setValue(subjectToUpdate);
 
     }
 
@@ -325,4 +317,31 @@ public class TakeAttendance extends AppCompatActivity {
             }
         }
     }
+
+
+    void QueryClassName(String classNamee){
+
+        databaseReference.child(classNamee).child("Subjects")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                            Subject subject = ds.getValue(Subject.class);
+                            //arrayListUID.add(ds.getKey());
+                            //arrayListSubjects.add(subject);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+    }
+
 }

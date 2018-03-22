@@ -12,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ import java.util.HashMap;
 public class AttendanceMiddleware extends AppCompatActivity {
 
     EditText editTextClassName, editTextSubjectName;
-    Button buttonStartScanning;
+    Button buttonStartScanning, buttonAddAttendance;
 
-    String key;
+    String key, className, subjectName;
     Subject subjectToUpdate;
 
     ArrayList<String> arrayListUID;
@@ -41,7 +42,7 @@ public class AttendanceMiddleware extends AppCompatActivity {
         editTextSubjectName = findViewById(R.id.editTextSubjectNameScan);
 
         buttonStartScanning = findViewById(R.id.buttonStartScanning);
-
+        buttonAddAttendance = findViewById(R.id.buttonAddAttendance);
 
         firebaseAuth= FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -52,14 +53,18 @@ public class AttendanceMiddleware extends AppCompatActivity {
             startActivity(new Intent(this,LoginActivity.class));
         }
 
+        arrayListUID = new ArrayList<>();
+        arrayListSubjects = new ArrayList<>();
+        //arrayListRollNumber = new ArrayList<>();
+        //arrayListRollNumberKeys = new ArrayList<>();
 
 
-        databaseReference.child(editTextClassName.getText().toString())
-                .child("Subjects")
+
+        databaseReference.child("TECMPMB").child("Subjects")
                 .addValueEventListener(new ValueEventListener() {
-
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
                         for(DataSnapshot ds : dataSnapshot.getChildren()) {
 
                             Subject subject = ds.getValue(Subject.class);
@@ -76,13 +81,27 @@ public class AttendanceMiddleware extends AppCompatActivity {
                 });
 
 
-
-        buttonStartScanning.setOnClickListener(new View.OnClickListener() {
+        buttonAddAttendance.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
 
-                String className = editTextClassName.getText().toString();
-                String subjectName =  editTextSubjectName.getText().toString();
+
+                className = editTextClassName.getText().toString();
+                subjectName =  editTextSubjectName.getText().toString();
+
+                QueryClassName(className);
+
+            }
+        });
+
+
+
+        buttonStartScanning.setOnClickListener(new View.OnClickListener() {
+            @Override
+             public void onClick(View view) {
+
+                //editTextClassName.setText("Size: " + arrayListUID.size());
+
 
 
                 for ( int i = 0; i < arrayListSubjects.size(); i ++){
@@ -94,19 +113,52 @@ public class AttendanceMiddleware extends AppCompatActivity {
                     }
                 }
 
+
                 subjectToUpdate.lectures =  Integer.toString( Integer.parseInt(subjectToUpdate.lectures) + 1);
 
-                //databaseReference.child(editTextClassName.getText().toString())
-                     //   .child("Subjects").child(key).setValue(subjectToUpdate);
+                databaseReference.child(editTextClassName.getText().toString())
+                        .child("Subjects").child(key).setValue(subjectToUpdate);
+
+
 
                 Intent in=new Intent(AttendanceMiddleware.this,TakeAttendance.class);
                 in.putExtra("ClassName", className);
                 in.putExtra("SubjectName",subjectName);
-                in.putExtra("Key", key);
-                in.putExtra("SubjectToUpdate", subjectToUpdate);
+                //in.putExtra("Key", key);
+                //in.putExtra("SubjectToUpdate", subjectToUpdate);
                 startActivity(in);
 
             }
         });
+
+
     }
+
+
+    void QueryClassName(String classNamee){
+
+        databaseReference.child(classNamee).child("Subjects")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                    Subject subject = ds.getValue(Subject.class);
+                    arrayListUID.add(ds.getKey());
+                    arrayListSubjects.add(subject);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+
 }
