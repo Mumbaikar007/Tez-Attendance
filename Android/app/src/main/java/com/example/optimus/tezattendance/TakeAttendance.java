@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
@@ -36,7 +37,9 @@ public class TakeAttendance extends AppCompatActivity {
     ImageView imageViewTick;
     Handler h;
 
+    Button buttonStopScanning;
 
+    ArrayList<String> arrayListPresentIds, arrayListMarkingKeys;
     String className, subjectName, key;
     Subject subjectToUpdate;
 
@@ -67,6 +70,8 @@ public class TakeAttendance extends AppCompatActivity {
         txtArduino = findViewById(R.id.textViewPresentRollID);
         imageViewTick = findViewById(R.id.imageViewTick);
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        buttonStopScanning = findViewById(R.id.buttonStopScanning);
+        arrayListPresentIds = new ArrayList<>();
 
         Intent x=getIntent();
         className = x.getStringExtra("ClassName");
@@ -102,7 +107,7 @@ public class TakeAttendance extends AppCompatActivity {
                             sb.delete(0, sb.length());                                      // and clear
 
                             updateAttendance(sbprint);
-
+                            arrayListPresentIds.add(sbprint);
 
                             txtArduino.setText(sbprint);            // update TextView
                             imageViewTick.setVisibility(View.VISIBLE);
@@ -143,6 +148,13 @@ public class TakeAttendance extends AppCompatActivity {
             }
         });
         */
+
+        buttonStopScanning.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //Continue
+            }
+        });
     }
 
     public void updateAttendance (final String idToUpdate ){
@@ -162,8 +174,7 @@ public class TakeAttendance extends AppCompatActivity {
                     Subject subject = ds.getValue(Subject.class);
 
                     if ( subject.subjectName.equals(subjectName)){
-                        key = ds.getKey();
-                        subjectToUpdate = subject;
+                        arrayListMarkingKeys.add(ds.getKey());
                     }
 
                 }
@@ -175,9 +186,6 @@ public class TakeAttendance extends AppCompatActivity {
 
             }
         });
-
-
-
 
     }
 
