@@ -251,7 +251,7 @@ void RegisterFingerprints() {
 
   int nextAttendance = 1;
 
-  while (nextAttendance){
+  while (true){
     
     nextAttendance = 0;
 
@@ -278,7 +278,7 @@ void RegisterFingerprints() {
     */
 
     
-    while (!getFingerprintEnroll(id) );
+    while ( !getFingerprintEnroll(id) );
 
     /*
     Serial.println ( "Do you want to register someone else ? (1/0)");

@@ -11,7 +11,18 @@
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="69dp"
         tools:layout_editor_absoluteY="0dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter Class Name"/>
+
 
         <EditText
             android:id="@+id/editTextClassName"
@@ -23,32 +34,53 @@
             tools:layout_editor_absoluteX="84dp"
             tools:layout_editor_absoluteY="62dp" />
 
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subject List" />
+
         <ListView
             android:id="@+id/listViewSubjects"
             android:layout_width="368dp"
-            android:layout_height="320dp"
+            android:layout_height="260dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="116dp" />
 
-        <EditText
-            android:id="@+id/editTextSubjectName"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="Subject Name" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextSubjectName"
+                android:layout_width="239dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Subject Name"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:id="@+id/buttonAddSubject"
+                android:layout_width="107dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/colorPrimary"
+                android:text="Add Subject"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/editTextSubjectName" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <Button
-            android:id="@+id/buttonAddSubject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Subject" />
-
-        <Button
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
             android:id="@+id/buttonRegisterClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register Class" />
+            android:text="Register Class"
+            />
 
 
     </LinearLayout>

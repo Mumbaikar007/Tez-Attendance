@@ -27,7 +27,8 @@
         <activity android:name=".EmptyDatabase" />
         <activity android:name=".UploadProxy" />
         <activity android:name=".RegisterClass" />
-        <activity android:name=".AttendanceMiddleware"></activity>
+        <activity android:name=".AttendanceMiddleware" />
+        <activity android:name=".CheckAttendance"></activity>
     </application>
 
 </manifest>

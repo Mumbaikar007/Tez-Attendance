@@ -24,7 +24,7 @@ import java.util.UUID;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth firebaseAuth;
-    private Button buttonLogout;
+    private Button buttonLogout, buttonCheckAttendance;
 
     private LinearLayout buttonRegisterStudent, buttonEmptyDatabase;
     private LinearLayout buttonTakeAttendance, buttonUploadProxy;
@@ -58,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         buttonRegisterStudent = findViewById(R.id.linearLayoutRegister);
         buttonTakeAttendance = findViewById(R.id.linearLayoutTakeAttendance);
         buttonUploadProxy = findViewById( R.id.linearLayoutUpdate);
+        buttonCheckAttendance = findViewById( R.id.button3);
 
 
         if(firebaseAuth.getCurrentUser() == null){
@@ -221,8 +222,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         if ( view == buttonUploadProxy){
-
             startActivity(new Intent(this,UploadProxy.class));
+        }
+
+        if ( view == buttonCheckAttendance ){
+            startActivity(new Intent(this, CheckAttendance.class));
         }
 
     }

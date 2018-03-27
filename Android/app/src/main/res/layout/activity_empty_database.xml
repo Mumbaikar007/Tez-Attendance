@@ -9,46 +9,48 @@
 
     <Button
         android:id="@+id/buttonEmptyFingerDatabase"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:text="Empty fingerprint Databse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.27" />
 
     <TextView
         android:id="@+id/textViewEmptyDatabase"
-        android:layout_width="58dp"
-        android:layout_height="17dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/buttonEmptyFingerDatabase"
         app:layout_constraintStart_toStartOf="@+id/buttonEmptyFingerDatabase"
         app:layout_constraintTop_toBottomOf="@+id/buttonEmptyFingerDatabase" />
 
-    <Button
-        android:id="@+id/buttonSendFour"
+    <EditText
+        android:id="@+id/editTextClassNameToDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Button"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/buttonEmptyFingerDatabase"
         app:layout_constraintEnd_toEndOf="@+id/buttonEmptyFingerDatabase"
-        app:layout_constraintStart_toStartOf="@+id/buttonEmptyFingerDatabase"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/buttonEmptyFingerDatabase" />
 
 
 </android.support.constraint.ConstraintLayout>

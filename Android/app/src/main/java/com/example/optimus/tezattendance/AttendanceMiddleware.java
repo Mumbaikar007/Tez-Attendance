@@ -59,7 +59,7 @@ public class AttendanceMiddleware extends AppCompatActivity {
         //arrayListRollNumberKeys = new ArrayList<>();
 
 
-
+        /*
         databaseReference.child("TECMPMB").child("Subjects")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -79,7 +79,7 @@ public class AttendanceMiddleware extends AppCompatActivity {
 
                     }
                 });
-
+           */
 
         buttonAddAttendance.setOnClickListener(new View.OnClickListener(){
             @Override

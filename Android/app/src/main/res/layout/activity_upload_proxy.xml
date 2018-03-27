@@ -6,17 +6,102 @@
     android:layout_height="match_parent"
     tools:context="com.example.optimus.tezattendance.UploadProxy">
 
-    <TextView
+    <EditText
+        android:id="@+id/editTextClassNameUpload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Upload Proxy"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:ems="10"
+        android:hint="Class Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/editTextRollNumberUpload"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRollNumberUpload"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextRollNumberUpload"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.769" />
+
+    <EditText
+        android:id="@+id/editTextRollNumberUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="Roll Number"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/editTextSubjectNameUpload"
+        app:layout_constraintEnd_toEndOf="@+id/editTextSubjectNameUpload"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextSubjectNameUpload" />
+
+    <EditText
+        android:id="@+id/editTextSubjectNameUpload"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="Subject Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCheckAttendanceUpload"
+        app:layout_constraintEnd_toEndOf="@+id/buttonCheckAttendanceUpload"
+        app:layout_constraintHorizontal_bias="0.564"
+        app:layout_constraintStart_toStartOf="@+id/buttonCheckAttendanceUpload" />
+
+    <TextView
+        android:id="@+id/textViewCurrentAttendanceUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+       
+        app:layout_constraintBottom_toTopOf="@+id/editTextNewAttendanceUpload"
+        app:layout_constraintEnd_toEndOf="@+id/buttonCheckAttendanceUpload"
+        app:layout_constraintStart_toStartOf="@+id/buttonCheckAttendanceUpload" />
+
+    <EditText
+        android:id="@+id/editTextNewAttendanceUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="New Attendance"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/buttonUpdateAttendance"
+        app:layout_constraintEnd_toEndOf="@+id/buttonCheckAttendanceUpload"
+        app:layout_constraintHorizontal_bias="0.562"
+        app:layout_constraintStart_toStartOf="@+id/buttonCheckAttendanceUpload" />
+
+    <Button
+        android:id="@+id/buttonCheckAttendanceUpload"
+        android:layout_width="159dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/colorPrimary"
+        android:text="Check Attendance"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCurrentAttendanceUpload"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonUpdateAttendance"
+        android:layout_width="161dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/colorPrimary"
+        android:text="Update Attendance"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNewAttendanceUpload"
+        app:layout_constraintStart_toStartOf="@+id/editTextNewAttendanceUpload" />
 
 </android.support.constraint.ConstraintLayout>

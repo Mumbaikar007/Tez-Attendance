@@ -29,6 +29,7 @@ public class EmptyDatabase extends AppCompatActivity {
     private Button buttonEmptyFingerPrintDatabase, buttonSendFour;
     private TextView textViewEmptyDatabase;
     DatabaseReference databaseAttendance;
+    EditText editTextDeleteDatabase;
 
 
     private BluetoothAdapter btAdapter = null;
@@ -54,24 +55,31 @@ public class EmptyDatabase extends AppCompatActivity {
 
         buttonEmptyFingerPrintDatabase = findViewById( R.id.buttonEmptyFingerDatabase);
         textViewEmptyDatabase = findViewById( R.id.textViewEmptyDatabase);
-        buttonSendFour = findViewById( R.id.buttonSendFour);
+        //buttonSendFour = findViewById( R.id.buttonSendFour);
+        editTextDeleteDatabase = findViewById(R.id.editTextClassNameToDelete);
 
         //sendData("1");
 
 
+        /*
         buttonSendFour.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 sendData("4");
             }
         });
+        */
 
         buttonEmptyFingerPrintDatabase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendData("1");
-                databaseAttendance.setValue(null);
-                textViewEmptyDatabase.setText("Databse is Empty");
+                databaseAttendance.child(editTextDeleteDatabase.getText().toString()).setValue(null);
+                textViewEmptyDatabase.setTextSize(20);
+                textViewEmptyDatabase.setText("Database Cleared !!");
+
+
             }
         });
 

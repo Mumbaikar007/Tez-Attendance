@@ -40,7 +40,8 @@ public class TakeAttendance extends AppCompatActivity {
     Button buttonStopScanning;
 
     ArrayList<String> arrayListPresentIds, arrayListMarkingKeys;
-    String className, subjectName, key;
+    ArrayList<JustForUpdate> arrayListJustForUpdate;
+    String className, subjectNamee, key;
     Subject subjectToUpdate;
 
     DatabaseReference databaseReference;
@@ -72,10 +73,11 @@ public class TakeAttendance extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         buttonStopScanning = findViewById(R.id.buttonStopScanning);
         arrayListPresentIds = new ArrayList<>();
+        arrayListJustForUpdate = new ArrayList<>();
 
         Intent x=getIntent();
         className = x.getStringExtra("ClassName");
-        subjectName = x.getStringExtra("SubjectName");
+        subjectNamee = x.getStringExtra("SubjectName");
         //key = x.getStringExtra("Key");
         //subjectToUpdate = x.getExtras().getParcelable("SubjectToUpdate");
 
@@ -85,7 +87,7 @@ public class TakeAttendance extends AppCompatActivity {
 
         //databaseReference.child(className).child("Subjects").child(key).setValue(subjectToUpdate);
 
-
+        arrayListMarkingKeys = new ArrayList<>();
         imageViewTick.setVisibility(View.INVISIBLE);
 
 
@@ -152,7 +154,11 @@ public class TakeAttendance extends AppCompatActivity {
         buttonStopScanning.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //Continue
+                for ( JustForUpdate j : arrayListJustForUpdate){
+                    databaseReference.child(className).child("Students")
+                            .child(j.rollnumber).child("Subjects")
+                            .child(j.key).setValue(j.subjectToUpdate);
+                }
             }
         });
     }
@@ -163,7 +169,7 @@ public class TakeAttendance extends AppCompatActivity {
 
         query = databaseReference
                 .child(className).child("Students")
-                .child(idToUpdate).child("Subjects");
+                .child(idToUpdate.trim()).child("Subjects");
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -173,8 +179,30 @@ public class TakeAttendance extends AppCompatActivity {
 
                     Subject subject = ds.getValue(Subject.class);
 
-                    if ( subject.subjectName.equals(subjectName)){
-                        arrayListMarkingKeys.add(ds.getKey());
+                    if ( subject.subjectName.equals(subjectNamee)){
+
+                        subjectToUpdate = subject;
+                        subjectToUpdate.lectures = Integer.toString(Integer.parseInt(subjectToUpdate.lectures) + 1);
+
+
+                        JustForUpdate justForUpdate = new JustForUpdate(ds.getKey(), idToUpdate,
+                                subjectToUpdate);
+                        arrayListJustForUpdate.add(justForUpdate);
+
+
+                        //arrayListMarkingKeys.add(ds.getKey());
+                        //Toast.makeText(getApplicationContext(), subject.subjectName
+                          //      + ": " +subject.lectures + "\n" + ds.getKey(), Toast.LENGTH_LONG ).show();
+                        //subjectToUpdate = subject;
+                        //key = ds.getKey();
+                        /*
+                        subjectToUpdate.lectures = Integer.toString(Integer.parseInt(subjectToUpdate.lectures) + 1);
+
+                        databaseReference
+                              .child(className).child("Students")
+                            .child(idToUpdate.trim()).child("Subjects").child(key).setValue(subjectToUpdate);
+                        */
+
                     }
 
                 }
@@ -186,6 +214,14 @@ public class TakeAttendance extends AppCompatActivity {
 
             }
         });
+
+
+        //subjectToUpdate.lectures = Integer.toString(Integer.parseInt(subjectToUpdate.lectures) + 1);
+
+        //databaseReference
+          //      .child(className).child("Students")
+            //    .child(idToUpdate.trim()).child("Subjects").child(key).setValue(subjectToUpdate);
+
 
     }
 
