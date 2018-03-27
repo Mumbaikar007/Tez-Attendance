@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +21,7 @@ public class CheckAttendance extends AppCompatActivity {
     EditText editTextClassName, editTextRollNumber;
     Button buttonCheckAttendace, buttonCalculate;
 
+    ListView listViewAttendance;
     ArrayList<Subject> totalLectures, attendedLectures;
 
     ArrayList<String> arrayListAttendance;
@@ -41,7 +43,7 @@ public class CheckAttendance extends AppCompatActivity {
         totalLectures = new ArrayList<>();
         attendedLectures = new ArrayList<>();
         buttonCalculate = findViewById( R.id.buttonCalculate);
-
+        listViewAttendance = findViewById(R.id.listViewShowingAttendance);
         buttonCheckAttendace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,6 +94,8 @@ public class CheckAttendance extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                //editTextClassName.setText("LEC: " + totalLectures.size());
+
                 Double totalAttended = 0D;
                 Double totalLecturesd = 0D;
 
@@ -106,14 +110,14 @@ public class CheckAttendance extends AppCompatActivity {
                                     Double.parseDouble(attendedLectures.get(i).lectures) /
                                             Double.parseDouble(totalLectures.get(i).lectures)
 
-                            )));
+                            )) + "%");
                 }
 
-                arrayListAttendance.add( "Total Attendance: " + Double.toString(totalAttended/totalLecturesd));
+                arrayListAttendance.add( "Total Attendance: " + Double.toString(totalAttended/totalLecturesd) + "%");
                 arrayAdapterAttendance = new ArrayAdapter<String>(CheckAttendance.this,
                         android.R.layout.simple_list_item_1,arrayListAttendance);
+                listViewAttendance.setAdapter(arrayAdapterAttendance);
 
-                
             }
         });
 

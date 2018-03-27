@@ -58,7 +58,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         buttonRegisterStudent = findViewById(R.id.linearLayoutRegister);
         buttonTakeAttendance = findViewById(R.id.linearLayoutTakeAttendance);
         buttonUploadProxy = findViewById( R.id.linearLayoutUpdate);
-        buttonCheckAttendance = findViewById( R.id.button3);
+        buttonCheckAttendance = findViewById( R.id.buttonCheckAttendanceInitial);
 
 
         if(firebaseAuth.getCurrentUser() == null){
@@ -79,6 +79,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         buttonRegisterStudent.setOnClickListener(this);
         buttonTakeAttendance.setOnClickListener(this);
         buttonUploadProxy.setOnClickListener(this);
+        buttonCheckAttendance.setOnClickListener(this);
 
     }
 

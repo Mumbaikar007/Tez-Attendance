@@ -100,7 +100,16 @@ public class TakeAttendance extends AppCompatActivity {
                         byte[] readBuf = (byte[]) msg.obj;
 
                         String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
-                        txtArduino.setText("Present Roll Number Id: " + strIncom);
+                        //txtArduino.setText("Present Roll Number Id: " + strIncom);
+
+                        updateAttendance(strIncom);
+                        arrayListPresentIds.add(strIncom);
+
+                        txtArduino.setText(strIncom);            // update TextView
+                        imageViewTick.setVisibility(View.VISIBLE);
+                        textPresent.setText("Marked Present !!");
+
+
                         sb.append(strIncom);                                                // append string
                         int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
                         if (endOfLineIndex > 0) {                                            // if end-of-line,
@@ -108,12 +117,6 @@ public class TakeAttendance extends AppCompatActivity {
                             String sbprint = sb.substring(0, endOfLineIndex);               // extract string
                             sb.delete(0, sb.length());                                      // and clear
 
-                            updateAttendance(sbprint);
-                            arrayListPresentIds.add(sbprint);
-
-                            txtArduino.setText(sbprint);            // update TextView
-                            imageViewTick.setVisibility(View.VISIBLE);
-                            textPresent.setText("Marked Present !!");
                             //btnOff.setEnabled(true);
                             //btnOn.setEnabled(true);
 

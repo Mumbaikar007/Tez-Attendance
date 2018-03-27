@@ -216,7 +216,8 @@ uint8_t getFingerprintEnroll(int id) {
   Serial.print("ID "); Serial.println(id);
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
-    blueTooth.write((char)id +'0');
+    char rollStored = (char)id +'0';
+    blueTooth.write(rollStored);
     Serial.println("Stored!");
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");

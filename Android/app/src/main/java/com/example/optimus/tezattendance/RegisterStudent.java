@@ -105,28 +105,53 @@ public class RegisterStudent extends AppCompatActivity {
                         String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
 
                         sb.append(strIncom);                                                // append string
-                        int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
-                        if (endOfLineIndex > 0) {                                            // if end-of-line,
-                            Log.d(TAG, "eol > 0");
-                            String sbprint = sb.substring(0, endOfLineIndex);               // extract string
-                            sb.delete(0, sb.length());                                      // and clear
-                            textViewIdRegistered.setText("Id: " + sbprint + " registered !");
 
-                            //String pushStudent =
-                            //databaseReference.child(className).child("Students").child(sbprint);
-                            //String pushID = databaseReference.child(className).child("Students")
-                                    //.child(pushStudent).push().getKey();
 
-                            //databaseReference.child(className).child("Students").child(pushStudent).child("RollNo").setValue(strIncom);
-                            
-                            
+                        if (strIncom.equals("0")){
+                            textViewIdRegistered.setText( "ID not registered !\nPlease try again...");
+                        }
+                        else {
+
+                            //textViewIdRegistered.setText("Len: " + sbprint.length());
+
+                            textViewIdRegistered.setText("Id: " + strIncom + " registered !");
+
                             for ( int i = 0 ; i < arrayListSubjects.size(); i ++){
 
                                 Subject subject = new Subject(arrayListSubjects.get(i), "0");
 
-                                databaseReference.child(className).child("Students").child(sbprint).
-                                    child("Subjects").push().setValue(subject);
+                                databaseReference.child(className).child("Students").child(strIncom).
+                                        child("Subjects").push().setValue(subject);
                             }
+
+                        }
+
+                        int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
+                        if (endOfLineIndex > 0) {                                            // if end-of-line,
+                            Log.d(TAG, "eol > 0");
+                            String sbprint = sb.substring(0, endOfLineIndex);               // extract string
+                            sb.delete(0, sb.length());// and clear
+
+
+                            /*
+                            if ( sbprint.equals("0")){
+                                textViewIdRegistered.setText("Id not registered !\nPlease try again ...");
+                            }
+                            else {
+
+
+
+                            }
+                            */
+
+                            //String pushStudent =
+                            //databaseReference.child(className).child("Students").child(sbprint);
+                            //String pushID = databaseReference.child(className).child("Students")
+                            //.child(pushStudent).push().getKey();
+
+                            //databaseReference.child(className).child("Students").child(pushStudent).child("RollNo").setValue(strIncom);
+
+
 
                         }
                         //Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
