@@ -107,7 +107,7 @@ public class CheckAttendance extends AppCompatActivity {
                     arrayListAttendance.add(totalLectures.get(i).subjectName + ": " +
                             (Double.toString(
 
-                                    Double.parseDouble(attendedLectures.get(i).lectures) /
+                                    Double.parseDouble(attendedLectures.get(i).lectures) * 100 /
                                             Double.parseDouble(totalLectures.get(i).lectures)
 
                             )) + "%");
