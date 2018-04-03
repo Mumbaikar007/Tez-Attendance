@@ -113,7 +113,7 @@ public class CheckAttendance extends AppCompatActivity {
                             )) + "%");
                 }
 
-                arrayListAttendance.add( "Total Attendance: " + Double.toString(totalAttended/totalLecturesd) + "%");
+                arrayListAttendance.add( "Total Attendance: " + Double.toString(totalAttended * 100 /totalLecturesd) + "%");
                 arrayAdapterAttendance = new ArrayAdapter<String>(CheckAttendance.this,
                         android.R.layout.simple_list_item_1,arrayListAttendance);
                 listViewAttendance.setAdapter(arrayAdapterAttendance);

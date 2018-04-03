@@ -10,46 +10,56 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:orientation="vertical"
-        android:layout_centerHorizontal ="true"
-        android:layout_centerVertical ="true"
         android:paddingLeft="15dp"
-        android:paddingRight="25dp">
+        android:paddingRight="25dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:srcCompat="@drawable/finallogo"
+            android:layout_gravity="center"/>
 
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:layout_marginTop="20dp"
+            android:ems="10"
             android:hint="Enter your email"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/editTextPassword"
-            android:hint="Enter your password"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:ems="10"
-            android:inputType="textPersonName"/>
+            android:hint="Enter your password"
+            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="302dp"
-            android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:text="Register User"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Register User" />
 
         <TextView
-            android:layout_width="wrap_content"
             android:id="@+id/textViewLogin"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:text="LogIn" />
+
     </LinearLayout>
 
 
