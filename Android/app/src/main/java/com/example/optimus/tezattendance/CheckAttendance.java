@@ -96,6 +96,8 @@ public class CheckAttendance extends AppCompatActivity {
 
                 //editTextClassName.setText("LEC: " + totalLectures.size());
 
+                arrayListAttendance.clear();
+
                 Double totalAttended = 0D;
                 Double totalLecturesd = 0D;
 
@@ -113,7 +115,7 @@ public class CheckAttendance extends AppCompatActivity {
                             )) + "%");
                 }
 
-                arrayListAttendance.add( "Total Attendance: " + Double.toString(totalAttended * 100 /totalLecturesd) + "%");
+                arrayListAttendance.add( "Total Attendance: " + Double.toString(totalAttended * 100     /totalLecturesd) + "%");
                 arrayAdapterAttendance = new ArrayAdapter<String>(CheckAttendance.this,
                         android.R.layout.simple_list_item_1,arrayListAttendance);
                 listViewAttendance.setAdapter(arrayAdapterAttendance);

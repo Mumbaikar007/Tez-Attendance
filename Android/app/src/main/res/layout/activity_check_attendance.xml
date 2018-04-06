@@ -8,7 +8,7 @@
 
     <EditText
         android:id="@+id/editTextClassNameCheck"
-        android:layout_width="148dp"
+        android:layout_width="155dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -51,10 +51,10 @@
         android:text="Check\n Attendance"
         app:layout_constraintBottom_toTopOf="@+id/buttonCalculate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.864"
+        app:layout_constraintHorizontal_bias="0.881"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.25" />
 
     <ListView
         android:id="@+id/listViewShowingAttendance"

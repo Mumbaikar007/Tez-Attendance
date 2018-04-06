@@ -28,7 +28,8 @@
         <activity android:name=".UploadProxy" />
         <activity android:name=".RegisterClass" />
         <activity android:name=".AttendanceMiddleware" />
-        <activity android:name=".CheckAttendance"></activity>
+        <activity android:name=".CheckAttendance" />
+        <activity android:name=".HighestAttendance"></activity>
     </application>
 
 </manifest>
