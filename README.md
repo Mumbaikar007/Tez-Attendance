@@ -34,10 +34,10 @@ https://github.com/Mumbaikar007/Tez-Attendance.git
 2. Open folders in their respective environments.
 
 3. Arduino Connections:<br>
-blueTooth tx- 10<br>
-blueTooth rx- 11<br>
-Adafruit rx- 2<br>
-Adafruit tx- 3
+blueTooth tx - 10<br>
+blueTooth rx - 11<br>
+Adafruit rx - 2<br>
+Adafruit tx - 3
 
 ## Running the tests
 
@@ -66,5 +66,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 * Those who marked me absent for not answering my roll-call. 
-* [This article](http://solderer.tv/data-transfer-between-android-and-arduino-via-bluetooth/) :heart:
+* [Solderer TV - Anatoliy](http://solderer.tv/data-transfer-between-android-and-arduino-via-bluetooth/)
 * [Darshan](https://github.com/darshan2790), [Sagar](https://github.com/SagarM879), [Jay](https://www.linkedin.com/in/jaykumar0530/), [Aditi](https://github.com/AditiPawaskar)
