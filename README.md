@@ -57,7 +57,7 @@ Adafruit tx - 3
 
 ## Contributing
 
-Mail me.
+Mail me - brainteaser97@gmail.com
 
 ## License
 
